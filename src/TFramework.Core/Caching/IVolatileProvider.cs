@@ -1,6 +1,6 @@
 ﻿namespace TFramework.Core.Caching
 {
-    public interface IVolatileProvider
+    public interface IVolatileProvider : ISingletonDependency
     {
     }
 }
