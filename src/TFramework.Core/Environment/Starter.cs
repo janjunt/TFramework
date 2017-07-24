@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using System;
 using TFramework.Core.Caching;
+using TFramework.Core.Logging;
 
 namespace TFramework.Core.Environment
 {
@@ -9,6 +10,8 @@ namespace TFramework.Core.Environment
         public static IContainer CreateHostContainer(Action<ContainerBuilder> registrations)
         {
             var builder = new ContainerBuilder();
+            builder.RegisterModule(new CollectionOrderModule());
+            builder.RegisterModule(new LoggingModule());
 
 
             var container = builder.Build();
