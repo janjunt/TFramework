@@ -3,24 +3,26 @@ using log4net.Core;
 using log4net.Util;
 using System;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
+using TFramework.Core.Environment;
 using Logger = Castle.Core.Logging.ILogger;
-
+using TFramework.Core.Environment.Configuration;
 
 namespace TFramework.Core.Logging
 {
-    public class Log4netLogger :  Logger//, IShim
+    public class Log4netLogger :  Logger, IShim
     {
         private static readonly Type declaringType = typeof(Log4netLogger);
 
-        //private readonly Lazy<ShellSettings> _shellSettings;
+        private readonly Lazy<ShellSettings> _shellSettings;
 
-        //public IOrchardHostContainer HostContainer { get; set; }
+        public IHostContainer HostContainer { get; set; }
 
         public Log4netLogger(log4net.Core.ILogger logger, Log4netFactory factory)
         {
-            //OrchardHostContainerRegistry.RegisterShim(this);
-            //Logger = logger;
-            //Factory = factory;
+            HostContainerRegistry.RegisterShim(this);
+            Logger = logger;
+            Factory = factory;
 
             //_shellSettings = new Lazy<ShellSettings>(LoadSettings);
         }
@@ -35,7 +37,7 @@ namespace TFramework.Core.Logging
 
         //private ShellSettings LoadSettings()
         //{
-        //    var ctx = HttpContext.Current;
+        //    var ctx = HostContainer.Resolve<HttpContext>();
         //    if (ctx == null)
         //        return null;
 
@@ -47,11 +49,11 @@ namespace TFramework.Core.Logging
         //    if (shellSettings == null)
         //        return null;
 
-        //    var orchardHost = HostContainer.Resolve<IOrchardHost>();
-        //    if (orchardHost == null)
+        //    var host = HostContainer.Resolve<IHost>();
+        //    if (host == null)
         //        return null;
 
-        //    var shellContext = orchardHost.GetShellContext(shellSettings);
+        //    var shellContext = host.GetShellContext(shellSettings);
         //    if (shellContext == null || shellContext.Settings == null)
         //        return null;
 
@@ -69,10 +71,10 @@ namespace TFramework.Core.Logging
 
             //try
             //{
-            //    var ctx = HttpContext.Current;
+            //    var ctx = HostContainer.Resolve<HttpContext>();
             //    if (ctx != null)
             //    {
-            //        ThreadContext.Properties["Url"] = ctx.Request.Url.ToString();
+            //        ThreadContext.Properties["Url"] = ctx.Request.Path.ToString();
             //    }
             //}
             //catch (HttpException)
@@ -432,87 +434,6 @@ namespace TFramework.Core.Logging
             {
                 AddExtendedThreadInfo();
                 Logger.Log(declaringType, Level.Warn, new SystemStringFormat(formatProvider, format, args), exception);
-            }
-        }
-
-        [Obsolete("Use IsFatalEnabled instead")]
-        public bool IsFatalErrorEnabled
-        {
-            get
-            {
-                return Logger.IsEnabledFor(Level.Fatal);
-            }
-        }
-
-        [Obsolete("Use DebugFormat instead")]
-        public void Debug(string format, params object[] args)
-        {
-            if (IsDebugEnabled)
-            {
-                Logger.Log(declaringType, Level.Debug, string.Format(format, args), null);
-            }
-        }
-
-        [Obsolete("Use ErrorFormat instead")]
-        public void Error(string format, params object[] args)
-        {
-            if (IsErrorEnabled)
-            {
-                Logger.Log(declaringType, Level.Error, string.Format(format, args), null);
-            }
-        }
-
-        [Obsolete("Use FatalFormat instead")]
-        public void Fatal(string format, params object[] args)
-        {
-            if (IsFatalEnabled)
-            {
-                Logger.Log(declaringType, Level.Fatal, string.Format(format, args), null);
-            }
-        }
-
-        [Obsolete("Use Fatal instead")]
-        public void FatalError(string message)
-        {
-            if (IsFatalErrorEnabled)
-            {
-                Logger.Log(declaringType, Level.Fatal, message, null);
-            }
-        }
-
-        [Obsolete("Use FatalFormat instead")]
-        public void FatalError(string format, params object[] args)
-        {
-            if (IsFatalErrorEnabled)
-            {
-                Logger.Log(declaringType, Level.Fatal, string.Format(format, args), null);
-            }
-        }
-
-        [Obsolete("Use Fatal instead")]
-        public void FatalError(string message, Exception exception)
-        {
-            if (IsFatalErrorEnabled)
-            {
-                Logger.Log(declaringType, Level.Fatal, message, exception);
-            }
-        }
-
-        [Obsolete("Use InfoFormat instead")]
-        public void Info(string format, params object[] args)
-        {
-            if (IsInfoEnabled)
-            {
-                Logger.Log(declaringType, Level.Info, string.Format(format, args), null);
-            }
-        }
-
-        [Obsolete("Use WarnFormat instead")]
-        public void Warn(string format, params object[] args)
-        {
-            if (IsWarnEnabled)
-            {
-                Logger.Log(declaringType, Level.Warn, string.Format(format, args), null);
             }
         }
 

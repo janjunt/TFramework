@@ -1,8 +1,9 @@
 ﻿using Castle.Core.Logging;
-using log4net;
 using log4net.Config;
 using System;
-using Microsoft.AspNetCore.Hosting;
+using log4net.Repository;
+using Microsoft.Extensions.Configuration;
+using TFramework.Core.Environment;
 
 namespace TFramework.Core.Logging
 {
@@ -10,17 +11,20 @@ namespace TFramework.Core.Logging
     {
         private static bool _isFileWatched = false;
 
-        //public Log4netFactory(IHostingEnvironment hostingEnvironment) 
-        //    : this(ConfigurationManager.AppSettings["log4net.Config"], hostingEnvironment) { }
+        private ILoggerRepository _loggerRepository;
 
-        public Log4netFactory(string configFilename, IHostingEnvironment hostingEnvironment)
+        public Log4netFactory(
+            ILoggerRepository loggerRepository, 
+            IConfiguration configuration,
+            IHostEnvironment hostEnvironment)
         {
-            //if (!_isFileWatched && !string.IsNullOrWhiteSpace(configFilename) && hostingEnvironment.IsFullTrust)
-            //{
-            //    // Only monitor configuration file in full trust
-            //    XmlConfigurator.ConfigureAndWatch(GetConfigFile(configFilename));
-            //    _isFileWatched = true;
-            //}
+            _loggerRepository = loggerRepository;
+            var configFilename = configuration["log4net.Config"];
+            if (!_isFileWatched && !string.IsNullOrWhiteSpace(configFilename) && hostEnvironment.IsFullTrust)
+            {
+                XmlConfigurator.ConfigureAndWatch(loggerRepository, GetConfigFile(configFilename));
+                _isFileWatched = true;
+            }
         }
 
         public override Castle.Core.Logging.ILogger Create(string name, LoggerLevel level)
@@ -30,7 +34,7 @@ namespace TFramework.Core.Logging
 
         public override Castle.Core.Logging.ILogger Create(string name)
         {
-            return new Log4netLogger(LogManager.GetLogger("", name), this);
+            return new Log4netLogger(_loggerRepository.GetLogger(name), this);
         }
     }
 }
