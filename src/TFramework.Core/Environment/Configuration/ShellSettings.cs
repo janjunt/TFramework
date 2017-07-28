@@ -5,9 +5,8 @@ using System.Linq;
 namespace TFramework.Core.Environment.Configuration
 {
     /// <summary>
-    /// Represents the minimalistic set of fields stored for each tenant. This 
-    /// model is obtained from the IShellSettingsManager, which by default reads this
-    /// from the App_Data settings.txt files.
+    /// 表示用于每个租户字段存储的简单集合。
+    /// 该模型从IShellSettingsManager获取，该文件默认从App_Data目录下的settings.txt文件中读取。
     /// </summary>
     public class ShellSettings
     {
@@ -55,12 +54,12 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// Gets all keys held by this shell settings.
+        /// 获取此shell设置的所有键。
         /// </summary>
         public IEnumerable<string> Keys { get { return _values.Keys; } }
 
         /// <summary>
-        /// The name of the tenant
+        /// 租房名称
         /// </summary>
         public string Name
         {
@@ -69,7 +68,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The database provider for the tenant
+        /// 租户的数据提供者
         /// </summary>
         public string DataProvider
         {
@@ -78,7 +77,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The database connection string
+        /// 数据库连接字符串
         /// </summary>
         public string DataConnectionString
         {
@@ -87,7 +86,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The data table prefix added to table names for this tenant
+        /// 租户的数据表名称前缀
         /// </summary>
         public string DataTablePrefix
         {
@@ -96,7 +95,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The host name of the tenant
+        /// 租户的主机名
         /// </summary>
         public string RequestUrlHost
         {
@@ -105,7 +104,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The request url prefix of the tenant
+        /// 租户请求Url前缀
         /// </summary>
         public string RequestUrlPrefix
         {
@@ -114,7 +113,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The encryption algorithm used for encryption services
+        /// 用于加密服务的加密算法
         /// </summary>
         public string EncryptionAlgorithm
         {
@@ -123,7 +122,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The encryption key used for encryption services
+        /// 用于加密服务的加密密钥
         /// </summary>
         public string EncryptionKey
         {
@@ -132,7 +131,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The hash algorithm used for encryption services
+        /// 用于加密服务的哈希算法
         /// </summary>
         public string HashAlgorithm
         {
@@ -141,7 +140,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The hash key used for encryption services
+        /// 用于加密服务的哈希密钥
         /// </summary>
         public string HashKey
         {
@@ -150,7 +149,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// List of available themes for this tenant
+        /// 租房可用主题列表
         /// </summary>
         public string[] Themes
         {
@@ -168,7 +167,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// List of available modules for this tenant
+        /// 租户可用模块列表
         /// </summary>
         public string[] Modules
         {
@@ -186,7 +185,7 @@ namespace TFramework.Core.Environment.Configuration
         }
 
         /// <summary>
-        /// The state is which the tenant is
+        /// 租户状态
         /// </summary>
         public TenantState State
         {

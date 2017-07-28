@@ -4,7 +4,7 @@ using TFramework.Core.Caching;
 namespace TFramework.Core.Environment
 {
     /// <summary>
-    /// Provides ability to connect Shims to the HostContainer
+    /// 提供将Shims连接到HostContainer的能力
     /// </summary>
     public class HostContainerRegistry
     {
