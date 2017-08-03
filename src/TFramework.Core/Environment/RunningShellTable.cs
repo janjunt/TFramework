@@ -101,20 +101,18 @@ namespace TFramework.Core.Environment
 
             if (unqualified.Count() == 1)
             {
-                // only one shell had no request url criteria
+                // 只有一个shell没有请求url标准
                 _fallback = unqualified.Single();
             }
             else if (unqualified.Any())
             {
-                // two or more shells had no request criteria. 
-                // this is technically a misconfiguration - so fallback to the default shell
-                // if it's one which will catch all requests
+                // 两个或两个以上的shell没有请求标准。
+                // 这在技术上是一个错误的配置 - 如果它是一个将捕获所有请求的回退到默认shell
                 _fallback = unqualified.SingleOrDefault(x => x.Name == ShellSettings.DefaultName);
             }
             else
             {
-                // no shells are unqualified - a request that does not match a shell's spec
-                // will not be mapped to routes coming from orchard
+                // 没有shell不合格 - 不符合shell规范的请求将不会映射到来自框架的路由
                 _fallback = null;
             }
 
@@ -123,26 +121,16 @@ namespace TFramework.Core.Environment
 
         public ShellSettings Match(HttpContext httpContext)
         {
-            throw new NotImplementedException();
-            //// use Host header to prevent proxy alteration of the orignal request
-            //try
-            //{
-            //    var httpRequest = httpContext.Request;
-            //    if (httpRequest == null)
-            //    {
-            //        return null;
-            //    }
+            var httpRequest = httpContext.Request;
+            if (httpRequest == null)
+            {
+                return null;
+            }
 
-            //    var host = httpRequest.Headers["Host"].ToString();
-            //    var appRelativeCurrentExecutionFilePath = httpRequest.AppRelativeCurrentExecutionFilePath;
+            var host = httpRequest.Headers["Host"].ToString();
+            var appRelativeCurrentExecutionFilePath = httpRequest.Path.ToString();
 
-            //    return Match(host ?? string.Empty, appRelativeCurrentExecutionFilePath);
-            //}
-            //catch (HttpException)
-            //{
-            //    // can happen on cloud service for an unknown reason
-            //    return null;
-            //}
+            return Match(host ?? string.Empty, appRelativeCurrentExecutionFilePath);
         }
 
         public ShellSettings Match(string host, string appRelativePath)
@@ -155,13 +143,13 @@ namespace TFramework.Core.Environment
                     return null;
                 }
 
-                // optimized path when only one tenant (Default), configured with no custom host
+                // 只有一个租户（默认）时，没有配置自定义主机。
                 if (!_shellsByHost.Any() && _fallback != null)
                 {
                     return _fallback;
                 }
 
-                // removing the port from the host
+                // 从主机中删除端口
                 var hostLength = host.IndexOf(':');
                 if (hostLength != -1)
                 {
@@ -172,7 +160,7 @@ namespace TFramework.Core.Environment
 
                 return _shellsByHostAndPrefix.GetOrAdd(hostAndPrefix, key => {
 
-                    // filtering shells by host
+                    // 根据主机过滤shell
                     IEnumerable<ShellSettings> shells;
 
                     if (!_shellsByHost.TryGetValue(host, out shells))
@@ -180,7 +168,7 @@ namespace TFramework.Core.Environment
                         if (!_shellsByHost.TryGetValue("", out shells))
                         {
 
-                            // no specific match, then look for star mapping
+                            // 没有具体的匹配，那么通过*号映射寻找
                             var subHostKey = _shellsByHost.Keys.FirstOrDefault(x =>
                                 x.StartsWith("*.") && host.EndsWith(x.Substring(2))
                                 );
@@ -194,7 +182,7 @@ namespace TFramework.Core.Environment
                         }
                     }
 
-                    // looking for a request url prefix match
+                    // 寻找一个请求url前缀的匹配
                     var mostQualifiedMatch = shells.FirstOrDefault(settings => {
                         if (settings.State == TenantState.Disabled)
                         {
