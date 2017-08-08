@@ -24,7 +24,7 @@ namespace TFramework.Core.Logging
             Logger = logger;
             Factory = factory;
 
-            //_shellSettings = new Lazy<ShellSettings>(LoadSettings);
+            _shellSettings = new Lazy<ShellSettings>(LoadSettings);
         }
 
         internal Log4netLogger()
@@ -35,52 +35,45 @@ namespace TFramework.Core.Logging
             : this(log.Logger, factory) {
         }
 
-        //private ShellSettings LoadSettings()
-        //{
-        //    var ctx = HostContainer.Resolve<HttpContext>();
-        //    if (ctx == null)
-        //        return null;
+        private ShellSettings LoadSettings()
+        {
+            var ctx = HostContainer.Resolve<HttpContext>();
+            if (ctx == null)
+                return null;
 
-        //    var runningShellTable = HostContainer.Resolve<IRunningShellTable>();
-        //    if (runningShellTable == null)
-        //        return null;
+            var runningShellTable = HostContainer.Resolve<IRunningShellTable>();
+            if (runningShellTable == null)
+                return null;
 
-        //    var shellSettings = runningShellTable.Match(new HttpContextWrapper(ctx));
-        //    if (shellSettings == null)
-        //        return null;
+            var shellSettings = runningShellTable.Match(ctx);
+            if (shellSettings == null)
+                return null;
 
-        //    var host = HostContainer.Resolve<IHost>();
-        //    if (host == null)
-        //        return null;
+            var host = HostContainer.Resolve<IHost>();
+            if (host == null)
+                return null;
 
-        //    var shellContext = host.GetShellContext(shellSettings);
-        //    if (shellContext == null || shellContext.Settings == null)
-        //        return null;
+            var shellContext = host.GetShellContext(shellSettings);
+            if (shellContext == null || shellContext.Settings == null)
+                return null;
 
 
-        //    return shellContext.Settings;
-        //}
+            return shellContext.Settings;
+        }
 
-        // Load the log4net thread with additional properties if they are available
+        // 如果log4net线程可用，将加载额外的属性
         protected internal void AddExtendedThreadInfo()
         {
-            //if (_shellSettings.Value != null)
-            //{
-            //    ThreadContext.Properties["Tenant"] = _shellSettings.Value.Name;
-            //}
+            if (_shellSettings.Value != null)
+            {
+                ThreadContext.Properties["Tenant"] = _shellSettings.Value.Name;
+            }
 
-            //try
-            //{
-            //    var ctx = HostContainer.Resolve<HttpContext>();
-            //    if (ctx != null)
-            //    {
-            //        ThreadContext.Properties["Url"] = ctx.Request.Path.ToString();
-            //    }
-            //}
-            //catch (HttpException)
-            //{
-            //    // can happen on cloud service for an unknown reason
-            //}
+            var ctx = HostContainer.Resolve<HttpContext>();
+            if (ctx != null)
+            {
+                ThreadContext.Properties["Url"] = ctx.Request.Path.ToString();
+            }
         }
 
         public bool IsDebugEnabled
