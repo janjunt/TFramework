@@ -7,6 +7,7 @@
     "log4net": "2.0.8",
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
     "Microsoft.AspNetCore.Html.Abstractions": "1.0.1",
+    "Microsoft.CSharp": "4.3.0",
     "NETStandard.Library": "1.6.0",
     "System.Collections.Concurrent": "4.0.12",
     "System.Reflection.TypeExtensions": "4.3.0"

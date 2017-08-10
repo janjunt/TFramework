@@ -61,7 +61,9 @@ namespace TFramework.Core.Logging
             return shellContext.Settings;
         }
 
-        // 如果log4net线程可用，将加载额外的属性
+        /// <summary>
+        /// 如果log4net线程可用，将加载额外的属性
+        /// </summary>
         protected internal void AddExtendedThreadInfo()
         {
             if (_shellSettings.Value != null)

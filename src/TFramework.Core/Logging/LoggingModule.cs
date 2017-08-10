@@ -33,14 +33,14 @@ namespace TFramework.Core.Logging
         {
             var implementationType = registration.Activator.LimitType;
 
-            // build an array of actions on this type to assign loggers to member properties
+            // 根据此类型构建一个actions数组用于把logger赋值给成员属性
             var injectors = BuildLoggerInjectors(implementationType).ToArray();
 
-            // if there are no logger properties, there's no reason to hook the activated event
+            // 如果没有logger属性，就没有需要活动事件钩子的理由
             if (!injectors.Any())
                 return;
 
-            // otherwise, whan an instance of this component is activated, inject the loggers on the instance
+            // 否则，如果激活一个该组件的实例，则在实例上注入loggers
             registration.Activated += (s, e) =>
             {
                 foreach (var injector in injectors)
@@ -50,7 +50,7 @@ namespace TFramework.Core.Logging
 
         private IEnumerable<Action<IComponentContext, object>> BuildLoggerInjectors(Type componentType)
         {
-            // Look for settable properties of type "ILogger" 
+            // 寻找类型为“ILogger”的可写属性
             var loggerProperties = componentType
                 .GetProperties(BindingFlags.SetProperty | BindingFlags.Public | BindingFlags.Instance)
                 .Select(p => new
@@ -60,12 +60,12 @@ namespace TFramework.Core.Logging
                     IndexParameters = p.GetIndexParameters(),
                     Accessors = p.GetAccessors(false)
                 })
-                .Where(x => x.PropertyType == typeof (ILogger)) // must be a logger
-                .Where(x => x.IndexParameters.Count() == 0) // must not be an indexer
+                .Where(x => x.PropertyType == typeof (ILogger)) // 必须是logger类型
+                .Where(x => x.IndexParameters.Count() == 0) // 不能是索引器
                 .Where(x => x.Accessors.Length != 1 || x.Accessors[0].ReturnType == typeof (void));
-                //must have get/set, or only set
+            // 必须是可读可写或可写属性
 
-            // Return an array of actions that resolve a logger and assign the property
+            // 返回一个actions数组用于解析logger并赋值给属性
             foreach (var entry in loggerProperties)
             {
                 var propertyInfo = entry.PropertyInfo;
