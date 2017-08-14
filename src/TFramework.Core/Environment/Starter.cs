@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using System;
 using TFramework.Core.Caching;
+using TFramework.Core.Events;
 using TFramework.Core.Logging;
 
 namespace TFramework.Core.Environment
@@ -12,6 +13,7 @@ namespace TFramework.Core.Environment
             var builder = new ContainerBuilder();
             builder.RegisterModule(new CollectionOrderModule());
             builder.RegisterModule(new LoggingModule());
+            builder.RegisterModule(new EventsModule());
 
 
             var container = builder.Build();
