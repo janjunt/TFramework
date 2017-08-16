@@ -33,16 +33,16 @@ namespace TFramework.Core.Logging
         public override Castle.Core.Logging.ILogger Create(string name)
         {
             var componentAssembly = _assemblyCache.GetOrAdd(name, n => Type.GetType(n).GetTypeInfo().Assembly);
-            var repository = LogManager.GetRepository(componentAssembly);
 
-            if (!string.IsNullOrWhiteSpace(_configFilename) && _hostEnvironment.IsFullTrust)
-            {
-                _repositoryCache.GetOrAdd(repository.Name, n =>
-                {
-                    XmlConfigurator.ConfigureAndWatch(repository, GetConfigFile(_configFilename));
-                    return repository;
-                });
-            }
+            var repository = _repositoryCache.GetOrAdd(componentAssembly.FullName, n =>
+             {
+                 var r = LogManager.CreateRepository(n);
+                 if (!string.IsNullOrWhiteSpace(_configFilename) && _hostEnvironment.IsFullTrust)
+                 {
+                     XmlConfigurator.ConfigureAndWatch(r, GetConfigFile(_configFilename));
+                 }
+                 return r;
+             });
 
             return new Log4netLogger(repository.GetLogger(name), this);
         }
