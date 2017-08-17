@@ -14,6 +14,7 @@ namespace TFramework.Core.Environment
             builder.RegisterModule(new CollectionOrderModule());
             builder.RegisterModule(new LoggingModule());
             builder.RegisterModule(new EventsModule());
+            builder.RegisterModule(new CacheModule());
 
 
             var container = builder.Build();
