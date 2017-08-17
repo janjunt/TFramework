@@ -7,6 +7,7 @@ using TFramework.Core.Environment;
 using System.Reflection;
 using log4net;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace TFramework.Core.Logging
 {
@@ -32,7 +33,24 @@ namespace TFramework.Core.Logging
 
         public override Castle.Core.Logging.ILogger Create(string name)
         {
-            var componentAssembly = _assemblyCache.GetOrAdd(name, n => Type.GetType(n).GetTypeInfo().Assembly);
+            Type componentType = null;
+            Assembly componentAssembly = null;
+
+            var assemblyName = _assemblyCache.Keys
+                .Where(n => name.StartsWith(n, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(n => n.Length)
+                .FirstOrDefault();
+            if (!string.IsNullOrEmpty(assemblyName))
+            {
+                componentAssembly = _assemblyCache[assemblyName];
+                componentType = componentAssembly.GetType(name, false, true);
+            }
+
+            if (componentType == null)
+            {
+                componentAssembly = Type.GetType(name).GetTypeInfo().Assembly;
+            }
+            _assemblyCache.GetOrAdd(componentAssembly.FullName, componentAssembly);
 
             var repository = _repositoryCache.GetOrAdd(componentAssembly.FullName, n =>
              {
