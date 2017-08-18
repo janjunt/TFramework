@@ -11,13 +11,13 @@ using TFramework.Events;
 
 namespace TFramework.Core.Events
 {
-    public class DefaultEventBus : IEventBus
+    public class DefaultTfEventBus : IEventBus
     {
         private readonly IIndex<string, IEnumerable<IEventHandler>> _eventHandlers;
         private readonly IExceptionPolicy _exceptionPolicy;
         private static readonly ConcurrentDictionary<string, Tuple<ParameterInfo[], Func<IEventHandler, object[], object>>> _delegateCache = new ConcurrentDictionary<string, Tuple<ParameterInfo[], Func<IEventHandler, object[], object>>>();
 
-        public DefaultEventBus(IIndex<string, IEnumerable<IEventHandler>> eventHandlers, IExceptionPolicy exceptionPolicy)
+        public DefaultTfEventBus(IIndex<string, IEnumerable<IEventHandler>> eventHandlers, IExceptionPolicy exceptionPolicy)
         {
             _eventHandlers = eventHandlers;
             _exceptionPolicy = exceptionPolicy;
