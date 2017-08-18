@@ -6,10 +6,10 @@ namespace TFramework.Core.Environment
     /// <summary>
     /// 提供将Shims连接到HostContainer的能力
     /// </summary>
-    public class HostContainerRegistry
+    public class TfHostContainerRegistry
     {
         private static readonly IList<Weak<IShim>> _shims = new List<Weak<IShim>>();
-        private static IHostContainer _hostContainer;
+        private static ITfHostContainer _hostContainer;
         private static readonly object _syncLock = new object();
 
         public static void RegisterShim(IShim shim)
@@ -23,7 +23,7 @@ namespace TFramework.Core.Environment
             }
         }
 
-        public static void RegisterHostContainer(IHostContainer container)
+        public static void RegisterHostContainer(ITfHostContainer container)
         {
             lock (_syncLock)
             {

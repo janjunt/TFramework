@@ -10,28 +10,28 @@ using TFramework.Core.Environment.Configuration;
 
 namespace TFramework.Core.Logging
 {
-    public class Log4netLogger :  Logger, IShim
+    public class TfLog4netLogger :  Logger, IShim
     {
-        private static readonly Type declaringType = typeof(Log4netLogger);
+        private static readonly Type declaringType = typeof(TfLog4netLogger);
 
         private readonly Lazy<ShellSettings> _shellSettings;
 
-        public IHostContainer HostContainer { get; set; }
+        public ITfHostContainer HostContainer { get; set; }
 
-        public Log4netLogger(log4net.Core.ILogger logger, Log4netFactory factory)
+        public TfLog4netLogger(log4net.Core.ILogger logger, TfLog4netFactory factory)
         {
-            HostContainerRegistry.RegisterShim(this);
+            TfHostContainerRegistry.RegisterShim(this);
             Logger = logger;
             Factory = factory;
 
             _shellSettings = new Lazy<ShellSettings>(LoadSettings);
         }
 
-        internal Log4netLogger()
+        internal TfLog4netLogger()
         {
         }
 
-        internal Log4netLogger(ILog log, Log4netFactory factory)
+        internal TfLog4netLogger(ILog log, TfLog4netFactory factory)
             : this(log.Logger, factory) {
         }
 
@@ -49,7 +49,7 @@ namespace TFramework.Core.Logging
             if (shellSettings == null)
                 return null;
 
-            var host = HostContainer.Resolve<IHost>();
+            var host = HostContainer.Resolve<ITfHost>();
             if (host == null)
                 return null;
 
@@ -103,7 +103,7 @@ namespace TFramework.Core.Logging
             get { return Logger.IsEnabledFor(Level.Warn); }
         }
 
-        protected internal Log4netFactory Factory { get; set; }
+        protected internal TfLog4netFactory Factory { get; set; }
 
         protected internal log4net.Core.ILogger Logger { get; set; }
 

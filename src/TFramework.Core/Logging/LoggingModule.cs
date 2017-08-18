@@ -21,7 +21,7 @@ namespace TFramework.Core.Logging
         protected override void Load(ContainerBuilder moduleBuilder)
         {
             moduleBuilder.RegisterType<CastleLoggerFactory>().As<ILoggerFactory>().InstancePerLifetimeScope();
-            moduleBuilder.RegisterType<Log4netFactory>()
+            moduleBuilder.RegisterType<TfLog4netFactory>()
                 .As<Castle.Core.Logging.ILoggerFactory>()
                 .InstancePerLifetimeScope();
 

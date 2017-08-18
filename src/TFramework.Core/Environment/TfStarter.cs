@@ -6,7 +6,7 @@ using TFramework.Core.Logging;
 
 namespace TFramework.Core.Environment
 {
-    public static class Starter
+    public static class TfStarter
     {
         public static IContainer CreateHostContainer(Action<ContainerBuilder> registrations)
         {
@@ -31,11 +31,11 @@ namespace TFramework.Core.Environment
                 .SingleInstance();
         }
 
-        public static IHost CreateHost(Action<ContainerBuilder> registrations)
+        public static ITfHost CreateHost(Action<ContainerBuilder> registrations)
         {
             var container = CreateHostContainer(registrations);
 
-            return container.Resolve<IHost>();
+            return container.Resolve<ITfHost>();
         }
 
     }

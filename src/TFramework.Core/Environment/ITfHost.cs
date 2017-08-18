@@ -3,7 +3,7 @@ using TFramework.Core.Environment.ShellBuilders;
 
 namespace TFramework.Core.Environment
 {
-    public interface IHost
+    public interface ITfHost
     {
         /// <summary>
         /// 启动时调用一次即可配置应用程序域，同时加载/应用已存在的shell配置

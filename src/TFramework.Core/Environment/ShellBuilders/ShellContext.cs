@@ -11,6 +11,6 @@ namespace TFramework.Core.Environment.ShellBuilders
         public ShellDescriptor Descriptor { get; set; }
         public ShellBlueprint Blueprint { get; set; }
         public ILifetimeScope LifetimeScope { get; set; }
-        public IShell Shell { get; set; }
+        public ITfShell Shell { get; set; }
     }
 }

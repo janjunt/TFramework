@@ -5,6 +5,6 @@
     /// </summary>
     public interface IShim
     {
-        IHostContainer HostContainer { get; set; }
+        ITfHostContainer HostContainer { get; set; }
     }
 }

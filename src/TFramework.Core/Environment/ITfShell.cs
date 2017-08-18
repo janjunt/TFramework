@@ -1,6 +1,6 @@
 ﻿namespace TFramework.Core.Environment
 {
-    public interface IShell
+    public interface ITfShell
     {
         void Activate();
         void Terminate();

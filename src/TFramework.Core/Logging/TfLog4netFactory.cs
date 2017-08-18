@@ -11,14 +11,14 @@ using System.Linq;
 
 namespace TFramework.Core.Logging
 {
-    public class Log4netFactory : AbstractLoggerFactory
+    public class TfLog4netFactory : AbstractLoggerFactory
     {
         private static ConcurrentDictionary<string, ILoggerRepository> _repositoryCache = new ConcurrentDictionary<string, ILoggerRepository>();
         private static ConcurrentDictionary<string, Assembly> _assemblyCache = new ConcurrentDictionary<string, Assembly>();
         private readonly string _configFilename;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public Log4netFactory(
+        public TfLog4netFactory(
             IConfiguration configuration,
             IHostEnvironment hostEnvironment)
         {
@@ -62,7 +62,7 @@ namespace TFramework.Core.Logging
                  return r;
              });
 
-            return new Log4netLogger(repository.GetLogger(name), this);
+            return new TfLog4netLogger(repository.GetLogger(name), this);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace TFramework.Core.Environment
 {
-    public interface IHostContainer
+    public interface ITfHostContainer
     {
         T Resolve<T>();
     }
